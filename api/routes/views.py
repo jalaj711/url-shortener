@@ -5,6 +5,8 @@ from django.shortcuts import redirect
 from .models import URL
 
 # Create your views here.
+
+
 def create_url(request):
     if request.method != "POST":
         response = HttpResponse("Method Not Allowed", status=405)
@@ -22,6 +24,18 @@ def create_url(request):
             'message': 'URL not provided',
             'success': False
         }, status=400)
+
+    try:
+        obj = URL.objects.get(actual=url)
+        if (obj):
+            return JsonResponse({
+                'url': '/u/' + obj.shortened + '/',
+                'success': True,
+                'message': "Shortened succesfully!"
+            })
+    except URL.DoesNotExist:
+        pass
+
     c_id = b64encode(str(URL.objects.count()).encode()).decode('utf-8')
     obj = URL.objects.create(actual=url, shortened=c_id)
     obj.save()
@@ -31,9 +45,10 @@ def create_url(request):
         'message': "Shortened succesfully!"
     })
 
+
 def url_handler(request, url):
     obj = URL.objects.get(shortened=url)
-    if(obj):
+    if (obj):
         return redirect(obj.actual)
     return JsonResponse({
         "message": "Not a valid URL",
