@@ -67,9 +67,10 @@ const Home: NextPage = () => {
                   {result}
                 </a>
                 <CopyIcon
-                  style={{
-                    height: "30px",
-                    fill: "white",
+                  onClick={() => {
+                    if (navigator.clipboard) {
+                      navigator.clipboard.writeText(result);
+                    }
                   }}
                 />
               </div>
