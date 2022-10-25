@@ -23,7 +23,13 @@ const Home: NextPage = () => {
       },
     }).then((res) => {
       if (res.status == 200) {
-        res.json().then((res) => setResult(window.location.host + res.url));
+        res
+          .json()
+          .then((res) =>
+            setResult(
+              window.location.protocol + "//" + window.location.host + res.url
+            )
+          );
       } else {
         alert("Failed with error: " + res.status);
       }
@@ -57,7 +63,9 @@ const Home: NextPage = () => {
             <div className="result-area">
               <span className="result-title">Your shortened URL:</span>
               <div className="result-url">
-                <div className="result">{result}</div>
+                <a className="result" href={result}>
+                  {result}
+                </a>
                 <CopyIcon
                   style={{
                     height: "30px",
@@ -110,7 +118,7 @@ const Home: NextPage = () => {
         }
         .input input:focus {
           outline: none;
-          box-shadow: -2px -2px 6px ${colors.primary},
+          box-shadow: -4px -4px 8px ${colors.primary},
             2px 2px 6px ${colors.secondary};
         }
         .button {
@@ -130,7 +138,7 @@ const Home: NextPage = () => {
         .button:hover {
           cursor: pointer;
           transform: translateY(-8px);
-          box-shadow: -2px -2px 6px ${colors.primary},
+          box-shadow: -4px -4px 8px ${colors.primary},
             2px 2px 6px ${colors.secondary};
         }
         .result-area {
